@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
 
+
     @Query("select u " +
             "from User u " +
             "join fetch u.role ur " +
@@ -19,8 +20,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "left join fetch ugl.subject ugls " +
             "left join fetch ugl.auditory ugla " +
             "left join fetch ugl.group uglg " +
-            "left join fetch ugla.corpus uglac " +
-            "left join fetch ugla.room uglar")
+            "left join fetch ugla.corpus uglac")
     List<User> findAllCustom();
 
 
@@ -33,9 +33,22 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "left join fetch ugl.auditory ugla " +
             "left join fetch ugl.group uglg " +
             "left join fetch ugla.corpus uglac " +
-            "left join fetch ugla.room uglar " +
             "where u.id = :id")
     Optional<User> findByIdCustom(Long id);
+
+
+
+    @Query("select u " +
+            "from User u " +
+            "join fetch u.role ur " +
+            "left join fetch u.group ug " +
+            "left join fetch ug.lessons ugl " +
+            "left join fetch ugl.subject ugls " +
+            "left join fetch ugl.auditory ugla " +
+            "left join fetch ugl.group uglg " +
+            "left join fetch ugla.corpus uglac " +
+            "where u.email = :email")
+    Optional<User> findByEmailCustom(String email);
 
 
     @Query("select u from User u join fetch u.role where u.email=:email")

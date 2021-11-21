@@ -24,7 +24,6 @@ public class EventSourcing {
     private final SubjectRepository subjectRepository;
     private final UserRepository userRepository;
     private final CorpusRepository corpusRepository;
-    private final RoomRepository roomRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
 
@@ -36,7 +35,6 @@ public class EventSourcing {
                          SubjectRepository subjectRepository,
                          UserRepository userRepository,
                          CorpusRepository corpusRepository,
-                         RoomRepository roomRepository,
                          BCryptPasswordEncoder passwordEncoder) {
         this.auditoryRepository = auditoryRepository;
         this.groupRepository = groupRepository;
@@ -45,7 +43,6 @@ public class EventSourcing {
         this.subjectRepository = subjectRepository;
         this.userRepository = userRepository;
         this.corpusRepository = corpusRepository;
-        this.roomRepository = roomRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -66,10 +63,8 @@ public class EventSourcing {
             Corpus corpus = new Corpus("eastern 2");
             corpus = this.corpusRepository.saveAndFlush(corpus);
 
-            Room room = new Room(204);
-            room = this.roomRepository.saveAndFlush(room);
 
-            Auditory auditory = new Auditory(corpus, room);
+            Auditory auditory = new Auditory(corpus, 204);
             auditory = this.auditoryRepository.saveAndFlush(auditory);
 
             Subject subject = new Subject("Math");

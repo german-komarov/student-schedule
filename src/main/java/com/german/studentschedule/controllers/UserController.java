@@ -37,7 +37,7 @@ public class UserController {
 
 
     @GetMapping
-    private ResponseEntity<Object> getAllUsers() {
+    private ResponseEntity<Object> getAll() {
         try {
             List<UserDto> users = this.userService.readAll();
             Map<String, Object> resultMap = singletonMap("users", users);
@@ -49,12 +49,28 @@ public class UserController {
     }
 
     @GetMapping("/by/id/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Object> getById(@PathVariable Long id) {
         try {
             UserDto userDto = this.userService.readById(id);
             return ResponseEntity.ok(singletonMap("user", userDto));
         } catch (NotFoundException e) {
             return ResponseEntity.status(404).body(singletonMap("message", e.getMessage()));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(SERVER_ERROR_JSON);
+        }
+    }
+
+    @GetMapping("/by/email/{email}")
+    public ResponseEntity<Object> getByEmail(@PathVariable String email) {
+        try {
+            UserDto userDto = this.userService.readByEmail(email);
+            return ResponseEntity.ok(singletonMap("user", userDto));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(singletonMap("message", e.getMessage()));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(SERVER_ERROR_JSON);
         }
     }
 }

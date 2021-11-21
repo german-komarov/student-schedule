@@ -1,8 +1,6 @@
 package com.german.studentschedule.util.dto;
 
 import com.german.studentschedule.domain.Auditory;
-import com.german.studentschedule.domain.Corpus;
-import com.german.studentschedule.domain.Room;
 
 public class AuditoryDto {
     private String corpus;
@@ -21,7 +19,7 @@ public class AuditoryDto {
             return;
         }
         this.corpus = auditory.getCorpus().getName();
-        this.room = auditory.getRoom().getNumber();
+        this.room = auditory.getRoom();
 
     }
 

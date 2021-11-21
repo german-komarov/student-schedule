@@ -36,7 +36,15 @@ public class UserService {
         if(optionalUser.isPresent()) {
             return new UserDto(optionalUser.get());
         }
-        throw new NotFoundException("There is no user with such id");
+        throw new NotFoundException(String.format("There is no user with id = %d", id));
+    }
+
+    public UserDto readByEmail(String email) throws NotFoundException {
+        Optional<User> optionalUser = this.repository.findByEmailCustom(email);
+        if(optionalUser.isPresent()) {
+            return new UserDto(optionalUser.get());
+        }
+        throw new NotFoundException(String.format("There is no user with email = %s", email));
     }
 
     public User readByEmailWithRole(String email) throws NotFoundException {
