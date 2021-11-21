@@ -10,10 +10,10 @@ import java.util.Objects;
 )
 public class Auditory extends BaseModel {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Corpus corpus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Room room;
 
     public Auditory() {
