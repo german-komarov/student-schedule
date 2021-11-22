@@ -2,17 +2,18 @@ package com.german.studentschedule.controllers;
 
 
 import com.german.studentschedule.domain.User;
+import com.german.studentschedule.dto.CreatingUserDto;
+import com.german.studentschedule.dto.ShortUserDto;
+import com.german.studentschedule.exceptions.AlreadyExistsException;
+import com.german.studentschedule.exceptions.WrongDataException;
 import com.german.studentschedule.services.UserService;
-import com.german.studentschedule.dto.UserDto;
+import com.german.studentschedule.dto.FullUserDto;
 import com.german.studentschedule.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class UserController {
     @GetMapping
     private ResponseEntity<Object> getAll() {
         try {
-            List<UserDto> users = this.userService.readAll().stream().map(UserDto::new).collect(Collectors.toList());
+            List<FullUserDto> users = this.userService.readAllWithAllProperties().stream().map(FullUserDto::new).collect(Collectors.toList());
             return ResponseEntity.ok(singletonMap("users", users));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -49,8 +50,8 @@ public class UserController {
     @GetMapping("/by/id/{id}")
     public ResponseEntity<Object> getById(@PathVariable Long id) {
         try {
-            User user = this.userService.readById(id);
-            return ResponseEntity.ok(singletonMap("user", new UserDto(user)));
+            User user = this.userService.readByIdWithAllProperties(id);
+            return ResponseEntity.ok(singletonMap("user", new FullUserDto(user)));
         } catch (NotFoundException e) {
             return ResponseEntity.status(404).body(singletonMap("message", e.getMessage()));
         } catch (Exception e) {
@@ -63,7 +64,7 @@ public class UserController {
     public ResponseEntity<Object> getByEmail(@PathVariable String email) {
         try {
             User user = this.userService.readByEmail(email);
-            return ResponseEntity.ok(singletonMap("user", new UserDto(user)));
+            return ResponseEntity.ok(singletonMap("user", new FullUserDto(user)));
         } catch (NotFoundException e) {
             return ResponseEntity.status(404).body(singletonMap("message", e.getMessage()));
         } catch (Exception e) {
@@ -71,4 +72,20 @@ public class UserController {
             return ResponseEntity.internalServerError().body(SERVER_ERROR_JSON);
         }
     }
+
+
+    @PostMapping
+    public ResponseEntity<Object> post(CreatingUserDto userDto) {
+        try {
+            User user = this.userService.create(userDto);
+            return ResponseEntity.ok(singletonMap("user", new FullUserDto(user)));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(singletonMap("message", e.getMessage()));
+        } catch (WrongDataException | AlreadyExistsException e) {
+            return ResponseEntity.badRequest().body(singletonMap("message", e.getMessage()));
+        }
+    }
+
+
+
 }

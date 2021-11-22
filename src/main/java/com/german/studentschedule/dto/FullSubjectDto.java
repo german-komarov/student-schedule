@@ -4,6 +4,7 @@ import com.german.studentschedule.domain.Group;
 import com.german.studentschedule.domain.Subject;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,8 +12,8 @@ import java.util.stream.Collectors;
 public class FullSubjectDto {
     private Long id;
     private String name;
-    private Set<ShortGroupDto> groups;
-    private Set<LessonDto> lessons;
+    private Set<ShortGroupDto> groups = new HashSet<>();
+    private Set<LessonDto> lessons = new HashSet<>();
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 
@@ -25,9 +26,11 @@ public class FullSubjectDto {
         this.name = subject.getName();
         this.createdAt = subject.getCreatedAt();
         this.updatedAt = subject.getUpdatedAt();
+
         if(subject.getGroups()!=null) {
             this.groups = subject.getGroups().stream().map(ShortGroupDto::new).collect(Collectors.toSet());
         }
+
         if(subject.getLessons()!=null) {
             this.lessons = subject.getLessons().stream().peek(l->l.setSubject(subject)).map(LessonDto::new).collect(Collectors.toSet());
         }

@@ -70,6 +70,13 @@ public class EventSourcing {
             Subject subject = new Subject("Math");
             subject = this.subjectRepository.saveAndFlush(subject);
 
+
+            Group group = new Group();
+            group.setName("CS");
+            group.setSubjects(Collections.singleton(subject));
+            group = this.groupRepository.saveAndFlush(group);
+
+
             User student = new User();
             User admin = new User();
             User superAdmin = new User();
@@ -77,26 +84,21 @@ public class EventSourcing {
             student.setEmail("student1@test.com");
             student.setPassword(this.passwordEncoder.encode("password"));
             student.setEnabled(true);
-            student.setRole(rolesByNames.get(RoleName.ROLE_STUDENT));
+            student.setRoles(Collections.singleton(rolesByNames.get(RoleName.ROLE_STUDENT)));
+            student.setGroup(group);
             student = this.userRepository.saveAndFlush(student);
 
             admin.setEmail("admin1@test.com");
             admin.setPassword(this.passwordEncoder.encode("password"));
             admin.setEnabled(true);
-            admin.setRole(rolesByNames.get(RoleName.ROLE_ADMIN));
+            admin.setRoles(Collections.singleton(rolesByNames.get(RoleName.ROLE_ADMIN)));
             admin = this.userRepository.saveAndFlush(admin);
 
-            superAdmin.setEmail("superadmin@test.com");
+            superAdmin.setEmail("superadmin1@test.com");
             superAdmin.setPassword(this.passwordEncoder.encode("password"));
             superAdmin.setEnabled(true);
-            superAdmin.setRole(rolesByNames.get(RoleName.ROLE_SUPER_ADMIN));
+            superAdmin.setRoles(Collections.singleton(rolesByNames.get(RoleName.ROLE_SUPER_ADMIN)));
             superAdmin = this.userRepository.saveAndFlush(superAdmin);
-
-            Group group = new Group();
-            group.setName("CS");
-            group.setStudents(Collections.singleton(student));
-            group.setSubjects(Collections.singleton(subject));
-            group = this.groupRepository.saveAndFlush(group);
 
             Lesson lesson = new Lesson();
             lesson.setAuditory(audience);

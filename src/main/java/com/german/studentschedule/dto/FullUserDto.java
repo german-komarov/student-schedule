@@ -2,36 +2,36 @@ package com.german.studentschedule.dto;
 
 import com.german.studentschedule.domain.User;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class UserDto {
-
+public class FullUserDto {
+    private Long id;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
     private String email;
     private boolean enable;
-    private RoleDto role;
+    private Set<RoleDto> roles;
     private ShortGroupDto group;
     private Set<LessonDto> lessons;
 
-    public UserDto() {
-    }
-
-    public UserDto(String email, boolean enable, RoleDto role, ShortGroupDto group, Set<LessonDto> lessons) {
-        this.email = email;
-        this.enable = enable;
-        this.role = role;
-        this.group = group;
-        this.lessons = lessons;
+    public FullUserDto() {
     }
 
 
-    public UserDto(User user) {
+    public FullUserDto(User user) {
         if(user==null) {
             return;
         }
+        this.id = user.getId();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
         this.email = user.getEmail();
         this.enable = user.isEnabled();
-        this.role = new RoleDto(user.getRole());
+        if(user.getRoles()!=null) {
+            this.roles = user.getRoles().stream().map(RoleDto::new).collect(Collectors.toSet());
+        }
         if (user.getGroup()!=null) {
             this.group = new ShortGroupDto(user.getGroup());
             if(user.getGroup().getLessons()!=null) {
@@ -39,6 +39,30 @@ public class UserDto {
             }
         }
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public ZonedDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(ZonedDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getEmail() {
@@ -57,12 +81,12 @@ public class UserDto {
         this.enable = enable;
     }
 
-    public RoleDto getRole() {
-        return role;
+    public Set<RoleDto> getRoles() {
+        return roles;
     }
 
-    public void setRole(RoleDto role) {
-        this.role = role;
+    public void setRoles(Set<RoleDto> roles) {
+        this.roles = roles;
     }
 
     public ShortGroupDto getGroup() {

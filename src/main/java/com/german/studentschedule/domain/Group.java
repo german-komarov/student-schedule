@@ -11,12 +11,7 @@ public class Group extends BaseModel {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany
-    @JoinTable(
-            name = "groups_students",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id")
-    )
+    @OneToMany(mappedBy = "group")
     private Set<User> students;
 
     @OneToMany(mappedBy = "group")
@@ -30,6 +25,14 @@ public class Group extends BaseModel {
     )
     private Set<Subject> subjects;
 
+
+    public Group() {
+    }
+
+    public Group(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -42,9 +45,6 @@ public class Group extends BaseModel {
         return students;
     }
 
-    public void setStudents(Set<User> students) {
-        this.students = students;
-    }
 
     public Set<Lesson> getLessons() {
         return lessons;

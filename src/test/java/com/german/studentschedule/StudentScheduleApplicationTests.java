@@ -3,7 +3,8 @@ package com.german.studentschedule;
 import com.german.studentschedule.domain.User;
 import com.german.studentschedule.repository.RoleRepository;
 import com.german.studentschedule.repository.UserRepository;
-import com.german.studentschedule.dto.UserDto;
+import com.german.studentschedule.dto.FullUserDto;
+import com.german.studentschedule.util.constants.RoleName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,15 +21,9 @@ class StudentScheduleApplicationTests {
     @Autowired
     private RoleRepository roleRepository;
     @Test
-    @Transactional
     void contextLoads() {
-        List<User> users = this.userRepository.findAllCustom();
-        List<UserDto> dtos = new ArrayList<>();
-        for(User u : users) {
-            UserDto dto = new UserDto(u);
-            dtos.add(dto);
-        }
-        System.err.println("OK");
+        RoleName roleName = RoleName.valueOf("hello");
+        System.err.println(roleName);
     }
 
 

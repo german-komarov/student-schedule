@@ -60,7 +60,7 @@ public class CorpusService {
         if(used) {
             throw new NotAllowedOperation("This corpus cannot be deleted as it is used by auditory");
         }
-        this.repository.deleteById(id);
+        this.repository.deleteByIdRegardlessExistence(id);
     }
 
 }

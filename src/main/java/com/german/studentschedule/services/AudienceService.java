@@ -76,7 +76,7 @@ public class AudienceService {
         if(used) {
             throw new NotAllowedOperation("This auditory cannot be deleted as it is used by lesson");
         }
-        this.repository.deleteById(id);
+        this.repository.deleteByIdRegardlessExistence(id);
     }
 
 }

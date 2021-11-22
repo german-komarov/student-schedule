@@ -2,6 +2,7 @@ package com.german.studentschedule.repository;
 
 import com.german.studentschedule.domain.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -28,4 +29,8 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
     @Query(value = "select exists(select * from groups_subjects where subject_id=:id)", nativeQuery = true)
     boolean isUsed(Long id);
+
+    @Modifying(flushAutomatically = true)
+    @Query("delete from Subject s where s.id = :id")
+    void deleteByIdRegardlessExistence(Long id);
 }

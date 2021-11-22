@@ -2,6 +2,7 @@ package com.german.studentschedule.repository;
 
 import com.german.studentschedule.domain.Audience;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -25,4 +26,8 @@ public interface AudienceRepository extends JpaRepository<Audience, Long> {
     @Query("select case when count(l.id)>0 then true else false end from Lesson l where l.audience.id=:id")
     boolean isUsed(Long id);
 
+
+    @Modifying(flushAutomatically = true)
+    @Query("delete from Audience a where a.id = :id")
+    void deleteByIdRegardlessExistence(Long id);
 }
