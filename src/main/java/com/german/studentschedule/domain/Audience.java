@@ -5,10 +5,10 @@ import java.util.Objects;
 
 @Entity
 @Table(
-        name = "auditories",
+        name = "audiences",
         indexes = @Index(name = "uk__auditory__corpus__room", columnList = "corpus_id, room", unique = true)
 )
-public class Auditory extends BaseModel {
+public class Audience extends BaseModel {
 
     private int room;
 
@@ -16,10 +16,10 @@ public class Auditory extends BaseModel {
     private Corpus corpus;
 
 
-    public Auditory() {
+    public Audience() {
     }
 
-    public Auditory(Corpus corpus, int room) {
+    public Audience(Corpus corpus, int room) {
         this.corpus = corpus;
         this.room = room;
     }

@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "left join fetch u.group ug " +
             "left join fetch ug.lessons ugl " +
             "left join fetch ugl.subject ugls " +
-            "left join fetch ugl.auditory ugla " +
+            "left join fetch ugl.audience ugla " +
             "left join fetch ugl.group uglg " +
             "left join fetch ugla.corpus uglac")
     List<User> findAllCustom();
@@ -30,7 +30,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "left join fetch u.group ug " +
             "left join fetch ug.lessons ugl " +
             "left join fetch ugl.subject ugls " +
-            "left join fetch ugl.auditory ugla " +
+            "left join fetch ugl.audience ugla " +
             "left join fetch ugl.group uglg " +
             "left join fetch ugla.corpus uglac " +
             "where u.id = :id")
@@ -44,7 +44,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "left join fetch u.group ug " +
             "left join fetch ug.lessons ugl " +
             "left join fetch ugl.subject ugls " +
-            "left join fetch ugl.auditory ugla " +
+            "left join fetch ugl.audience ugla " +
             "left join fetch ugl.group uglg " +
             "left join fetch ugla.corpus uglac " +
             "where u.email = :email")

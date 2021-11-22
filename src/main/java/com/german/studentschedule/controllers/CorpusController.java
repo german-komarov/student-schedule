@@ -30,7 +30,7 @@ public class CorpusController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllCorpuses() {
+    public ResponseEntity<Object> getAll() {
         try {
             List<Corpus> corpuses = this.corpusService.readAll();
             return ResponseEntity.ok(singletonMap("corpuses", corpuses));
@@ -58,7 +58,7 @@ public class CorpusController {
 
 
     @GetMapping("/by/name/{word}")
-    public ResponseEntity<Object> readByNameContaining(@PathVariable String word) {
+    public ResponseEntity<Object> getByNameContaining(@PathVariable String word) {
         try {
             Corpus corpus = this.corpusService.readByNameContaining(word);
             return ResponseEntity.ok(singletonMap("corpus", corpus));
@@ -85,7 +85,7 @@ public class CorpusController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestParam String name) {
+    public ResponseEntity<Object> put(@PathVariable Long id, @RequestParam String name) {
         try {
             Corpus corpus = this.corpusService.update(id, name);
             return ResponseEntity.ok(singletonMap("corpus", corpus));

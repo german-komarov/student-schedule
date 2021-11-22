@@ -17,7 +17,7 @@ import java.util.Map;
 @Configuration
 public class EventSourcing {
 
-    private final AuditoryRepository auditoryRepository;
+    private final AudienceRepository audienceRepository;
     private final GroupRepository groupRepository;
     private final LessonRepository lessonRepository;
     private final RoleRepository roleRepository;
@@ -28,7 +28,7 @@ public class EventSourcing {
 
 
     @Autowired
-    public EventSourcing(AuditoryRepository auditoryRepository,
+    public EventSourcing(AudienceRepository audienceRepository,
                          GroupRepository groupRepository,
                          LessonRepository lessonRepository,
                          RoleRepository roleRepository,
@@ -36,7 +36,7 @@ public class EventSourcing {
                          UserRepository userRepository,
                          CorpusRepository corpusRepository,
                          BCryptPasswordEncoder passwordEncoder) {
-        this.auditoryRepository = auditoryRepository;
+        this.audienceRepository = audienceRepository;
         this.groupRepository = groupRepository;
         this.lessonRepository = lessonRepository;
         this.roleRepository = roleRepository;
@@ -64,14 +64,15 @@ public class EventSourcing {
             corpus = this.corpusRepository.saveAndFlush(corpus);
 
 
-            Auditory auditory = new Auditory(corpus, 204);
-            auditory = this.auditoryRepository.saveAndFlush(auditory);
+            Audience audience = new Audience(corpus, 204);
+            audience = this.audienceRepository.saveAndFlush(audience);
 
             Subject subject = new Subject("Math");
             subject = this.subjectRepository.saveAndFlush(subject);
 
             User student = new User();
             User admin = new User();
+            User superAdmin = new User();
 
             student.setEmail("student1@test.com");
             student.setPassword(this.passwordEncoder.encode("password"));
@@ -85,6 +86,11 @@ public class EventSourcing {
             admin.setRole(rolesByNames.get(RoleName.ROLE_ADMIN));
             admin = this.userRepository.saveAndFlush(admin);
 
+            superAdmin.setEmail("superadmin@test.com");
+            superAdmin.setPassword(this.passwordEncoder.encode("password"));
+            superAdmin.setEnabled(true);
+            superAdmin.setRole(rolesByNames.get(RoleName.ROLE_SUPER_ADMIN));
+            superAdmin = this.userRepository.saveAndFlush(superAdmin);
 
             Group group = new Group();
             group.setName("CS");
@@ -92,7 +98,7 @@ public class EventSourcing {
             group = this.groupRepository.saveAndFlush(group);
 
             Lesson lesson = new Lesson();
-            lesson.setAuditory(auditory);
+            lesson.setAuditory(audience);
             lesson.setDate(LocalDate.now().plusDays(1));
             lesson.setSubject(subject);
             lesson.setGroup(group);

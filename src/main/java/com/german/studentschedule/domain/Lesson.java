@@ -2,9 +2,6 @@ package com.german.studentschedule.domain;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "lessons")
@@ -17,7 +14,7 @@ public class Lesson extends BaseModel {
     private Subject subject;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    private Auditory auditory;
+    private Audience audience;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Group group;
@@ -38,12 +35,12 @@ public class Lesson extends BaseModel {
         this.subject = subject;
     }
 
-    public Auditory getAuditory() {
-        return auditory;
+    public Audience getAuditory() {
+        return audience;
     }
 
-    public void setAuditory(Auditory auditory) {
-        this.auditory = auditory;
+    public void setAuditory(Audience audience) {
+        this.audience = audience;
     }
 
 

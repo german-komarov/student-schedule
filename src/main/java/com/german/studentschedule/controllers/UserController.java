@@ -40,8 +40,7 @@ public class UserController {
     private ResponseEntity<Object> getAll() {
         try {
             List<UserDto> users = this.userService.readAll();
-            Map<String, Object> resultMap = singletonMap("users", users);
-            return ResponseEntity.ok(resultMap);
+            return ResponseEntity.ok(singletonMap("users", users));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.internalServerError().body(SERVER_ERROR_JSON);
