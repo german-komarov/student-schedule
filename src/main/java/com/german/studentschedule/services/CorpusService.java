@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -37,7 +38,7 @@ public class CorpusService {
     }
 
     public List<Corpus> readByNameContaining(String word) throws NotFoundException {
-        return this.repository.findByNameContaining(word);
+        return this.repository.findByNameContainingInLowerCase(word.toLowerCase(Locale.ROOT));
     }
 
     public Corpus create(String name) throws AlreadyExistsException {

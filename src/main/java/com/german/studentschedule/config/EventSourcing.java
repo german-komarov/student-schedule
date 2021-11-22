@@ -95,6 +95,7 @@ public class EventSourcing {
             Group group = new Group();
             group.setName("CS");
             group.setStudents(Collections.singleton(student));
+            group.setSubjects(Collections.singleton(subject));
             group = this.groupRepository.saveAndFlush(group);
 
             Lesson lesson = new Lesson();

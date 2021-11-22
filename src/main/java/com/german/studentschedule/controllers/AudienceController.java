@@ -75,7 +75,7 @@ public class AudienceController {
     public ResponseEntity<Object> post(@RequestParam Long corpusId, @RequestParam int room) {
         try {
             Audience audience = this.audienceService.create(corpusId, room);
-            return ResponseEntity.ok(singletonMap("audience", new AudienceDto(audience)));
+            return ResponseEntity.status(201).body(singletonMap("audience", new AudienceDto(audience)));
         } catch (AlreadyExistsException e) {
             return ResponseEntity.badRequest().body(singletonMap("message", e.getMessage()));
         } catch (NotFoundException e) {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,7 @@ public class SubjectService {
     }
 
     public List<Subject> readAll() {
-        return this.repository.findAll();
+        return this.repository.findAllCustom();
     }
 
     public Subject readById(Long id) throws NotFoundException {
@@ -37,7 +38,7 @@ public class SubjectService {
     }
 
     public List<Subject> readByNameContaining(String word) {
-        return this.repository.findByNameContaining(word);
+        return this.repository.findByNameContainingInLowerCase(word.toLowerCase(Locale.ROOT));
     }
 
     public Subject create(String name) throws AlreadyExistsException {

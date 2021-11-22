@@ -11,12 +11,7 @@ public class Subject extends BaseModel {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany
-    @JoinTable(
-            name = "subjects_lessons",
-            joinColumns = @JoinColumn(name = "lesson_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
-    )
+    @OneToMany(mappedBy = "subject")
     private Set<Lesson> lessons;
 
     @ManyToMany
