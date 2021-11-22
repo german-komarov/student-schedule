@@ -1,4 +1,4 @@
-package com.german.studentschedule.util.dto;
+package com.german.studentschedule.dto;
 
 import com.german.studentschedule.domain.Lesson;
 
@@ -6,14 +6,14 @@ import java.time.LocalDate;
 
 public class LessonDto {
     private LocalDate date;
-    private String subject;
+    private ShortSubjectDto subject;
     private AudienceDto audience;
     private ShortGroupDto group;
 
     public LessonDto() {
     }
 
-    public LessonDto(LocalDate date, String subject, AudienceDto audience, ShortGroupDto group) {
+    public LessonDto(LocalDate date, ShortSubjectDto subject, AudienceDto audience, ShortGroupDto group) {
         this.date = date;
         this.subject = subject;
         this.audience = audience;
@@ -25,7 +25,7 @@ public class LessonDto {
             return;
         }
         this.date = lesson.getDate();
-        this.subject = lesson.getSubject().getName();
+        this.subject = new ShortSubjectDto(lesson.getSubject());
         this.audience = new AudienceDto(lesson.getAuditory());
         this.group = new ShortGroupDto(lesson.getGroup());
     }
@@ -38,11 +38,11 @@ public class LessonDto {
         this.date = date;
     }
 
-    public String getSubject() {
+    public ShortSubjectDto getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(ShortSubjectDto subject) {
         this.subject = subject;
     }
 

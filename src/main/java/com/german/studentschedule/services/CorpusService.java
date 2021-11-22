@@ -1,9 +1,10 @@
 package com.german.studentschedule.services;
 
 import com.german.studentschedule.domain.Corpus;
+import com.german.studentschedule.exceptions.AlreadyExistsException;
 import com.german.studentschedule.repository.CorpusRepository;
-import com.german.studentschedule.util.exceptions.NotAllowedOperation;
-import com.german.studentschedule.util.exceptions.NotFoundException;
+import com.german.studentschedule.exceptions.NotAllowedOperation;
+import com.german.studentschedule.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,21 +36,21 @@ public class CorpusService {
         throw new NotFoundException(String.format("There is no corpus with id = %d", id));
     }
 
-    public Corpus readByNameContaining(String word) throws NotFoundException {
-        Optional<Corpus> optionalCorpus = this.repository.findByNameContaining(word);
-        if(optionalCorpus.isPresent()) {
-            return optionalCorpus.get();
-        }
-        throw new NotFoundException(String.format("There is no corpus containing word = %s", word));
+    public List<Corpus> readByNameContaining(String word) throws NotFoundException {
+        return this.repository.findByNameContaining(word);
     }
 
-    public Corpus create(String name) {
+    public Corpus create(String name) throws AlreadyExistsException {
+        boolean exists = this.repository.existsByName(name);
+        if(exists) {
+            throw new AlreadyExistsException(String.format("There is already corpus with name = %s", name));
+        }
         return this.repository.save(new Corpus(name));
     }
 
-    public Corpus update(Long id, String name) throws NotFoundException {
+    public Corpus update(Long id, String updatedName) throws NotFoundException {
         Corpus corpus = this.readById(id);
-        corpus.setName(name);
+        corpus.setName(updatedName);
         return this.repository.save(corpus);
     }
 

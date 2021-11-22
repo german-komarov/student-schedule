@@ -1,9 +1,10 @@
 package com.german.studentschedule.controllers;
 
 import com.german.studentschedule.domain.Corpus;
+import com.german.studentschedule.exceptions.AlreadyExistsException;
 import com.german.studentschedule.services.CorpusService;
-import com.german.studentschedule.util.exceptions.NotAllowedOperation;
-import com.german.studentschedule.util.exceptions.NotFoundException;
+import com.german.studentschedule.exceptions.NotAllowedOperation;
+import com.german.studentschedule.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class CorpusController {
     @GetMapping("/by/name/{word}")
     public ResponseEntity<Object> getByNameContaining(@PathVariable String word) {
         try {
-            Corpus corpus = this.corpusService.readByNameContaining(word);
-            return ResponseEntity.ok(singletonMap("corpus", corpus));
+            List<Corpus> corpuses = this.corpusService.readByNameContaining(word);
+            return ResponseEntity.ok(singletonMap("corpuses", corpuses));
         } catch (NotFoundException e) {
             return ResponseEntity
                     .status(404)
@@ -77,6 +78,8 @@ public class CorpusController {
         try {
             Corpus corpus = this.corpusService.create(name);
             return ResponseEntity.status(201).body(singletonMap("corpus", corpus));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.badRequest().body(singletonMap("message", e.getMessage()));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.internalServerError().body(SERVER_ERROR_JSON);

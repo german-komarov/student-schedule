@@ -10,7 +10,7 @@ public class Lesson extends BaseModel {
     @Column(nullable = false)
     private LocalDate date;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Subject subject;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)

@@ -3,8 +3,8 @@ package com.german.studentschedule.services;
 
 import com.german.studentschedule.domain.User;
 import com.german.studentschedule.repository.UserRepository;
-import com.german.studentschedule.util.dto.UserDto;
-import com.german.studentschedule.util.exceptions.NotFoundException;
+import com.german.studentschedule.dto.UserDto;
+import com.german.studentschedule.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,23 +26,22 @@ public class UserService {
     }
 
 
-    public List<UserDto> readAll() {
-        List<User> users = this.repository.findAllCustom();
-        return users.stream().map(UserDto::new).collect(Collectors.toList());
+    public List<User> readAll() {
+        return this.repository.findAllCustom();
     }
 
-    public UserDto readById(Long id) throws NotFoundException {
+    public User readById(Long id) throws NotFoundException {
         Optional<User> optionalUser = this.repository.findByIdCustom(id);
         if(optionalUser.isPresent()) {
-            return new UserDto(optionalUser.get());
+            return optionalUser.get();
         }
         throw new NotFoundException(String.format("There is no user with id = %d", id));
     }
 
-    public UserDto readByEmail(String email) throws NotFoundException {
+    public User readByEmail(String email) throws NotFoundException {
         Optional<User> optionalUser = this.repository.findByEmailCustom(email);
         if(optionalUser.isPresent()) {
-            return new UserDto(optionalUser.get());
+            return optionalUser.get();
         }
         throw new NotFoundException(String.format("There is no user with email = %s", email));
     }

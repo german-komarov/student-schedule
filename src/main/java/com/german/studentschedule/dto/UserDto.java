@@ -1,8 +1,7 @@
-package com.german.studentschedule.util.dto;
+package com.german.studentschedule.dto;
 
 import com.german.studentschedule.domain.User;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

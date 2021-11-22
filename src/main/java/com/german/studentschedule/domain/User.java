@@ -29,7 +29,7 @@ public class User extends BaseModel implements UserDetails {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "students_groups",
+            name = "groups_students",
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )

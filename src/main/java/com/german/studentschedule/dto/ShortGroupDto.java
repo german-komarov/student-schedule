@@ -1,4 +1,4 @@
-package com.german.studentschedule.util.dto;
+package com.german.studentschedule.dto;
 
 import com.german.studentschedule.domain.Group;
 

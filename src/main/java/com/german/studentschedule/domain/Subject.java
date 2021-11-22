@@ -1,9 +1,8 @@
 package com.german.studentschedule.domain;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "subjects")
@@ -11,6 +10,22 @@ public class Subject extends BaseModel {
 
     @Column(unique = true, nullable = false)
     private String name;
+
+    @OneToMany
+    @JoinTable(
+            name = "subjects_lessons",
+            joinColumns = @JoinColumn(name = "lesson_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private Set<Lesson> lessons;
+
+    @ManyToMany
+    @JoinTable(
+            name = "groups_subjects",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id"))
+    private Set<Group> groups;
+
 
     public Subject() {
     }
@@ -25,5 +40,21 @@ public class Subject extends BaseModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 }

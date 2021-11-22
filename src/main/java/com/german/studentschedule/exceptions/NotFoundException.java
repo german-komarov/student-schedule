@@ -1,4 +1,4 @@
-package com.german.studentschedule.util.exceptions;
+package com.german.studentschedule.exceptions;
 
 public class NotFoundException extends Exception {
 

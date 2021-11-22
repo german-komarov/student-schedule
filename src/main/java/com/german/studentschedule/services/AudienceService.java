@@ -3,10 +3,11 @@ package com.german.studentschedule.services;
 
 import com.german.studentschedule.domain.Audience;
 import com.german.studentschedule.domain.Corpus;
+import com.german.studentschedule.exceptions.AlreadyExistsException;
 import com.german.studentschedule.repository.AudienceRepository;
-import com.german.studentschedule.util.dto.AudienceDto;
-import com.german.studentschedule.util.exceptions.NotAllowedOperation;
-import com.german.studentschedule.util.exceptions.NotFoundException;
+import com.german.studentschedule.dto.AudienceDto;
+import com.german.studentschedule.exceptions.NotAllowedOperation;
+import com.german.studentschedule.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,44 +30,43 @@ public class AudienceService {
     }
 
 
-    public List<AudienceDto> readAll() {
-        List<Audience> audiences = this.repository.findAllCustom();
-        return audiences.stream().map(AudienceDto::new).collect(Collectors.toList());
+    public List<Audience> readAll() {
+        return this.repository.findAllCustom();
     }
 
 
-    public AudienceDto readById(Long id) throws NotFoundException {
+    public Audience readById(Long id) throws NotFoundException {
         Optional<Audience> optionalAudience = this.repository.findByIdCustom(id);
         if(optionalAudience.isPresent()) {
-            return new AudienceDto(optionalAudience.get());
+            return optionalAudience.get();
         }
         throw new NotFoundException(String.format("There is no audience with id=%d", id));
     }
 
 
-    public List<AudienceDto> readByCorpus(Long corpusId) {
-        List<Audience> audiences = this.repository.findByCorpus(corpusId);
-        return audiences.stream().map(AudienceDto::new).collect(Collectors.toList());
+    public List<Audience> readByCorpus(Long corpusId) {
+        return this.repository.findByCorpus(corpusId);
     }
 
 
-    public AudienceDto create(Long corpusId, int room) throws NotFoundException, NotAllowedOperation {
-        if(this.repository.existsByCorpusAndRoom(corpusId, room)) {
-            throw new NotAllowedOperation(String.format("There is already audience with corpus.id = %d and room = %d", corpusId, room));
+    public Audience create(Long corpusId, int room) throws NotFoundException, AlreadyExistsException {
+        boolean exists = this.repository.existsByCorpusAndRoom(corpusId, room);
+        if(exists) {
+            throw new AlreadyExistsException(String.format("There is already audience with corpus.id = %d and room = %d", corpusId, room));
         }
         Corpus corpus = this.corpusService.readById(corpusId);
         Audience audience = new Audience(corpus, room);
         audience = this.repository.save(audience);
-        return new AudienceDto(audience);
+        return audience;
     }
 
-    public AudienceDto update(Long id, int updatedRoom) throws NotFoundException {
-        Optional<Audience> optionalAudience = this.repository.findByIdCustom(id);
+    public Audience update(Long id, int updatedRoom) throws NotFoundException {
+        Optional<Audience> optionalAudience = this.repository.findById(id);
         if(optionalAudience.isPresent()) {
             Audience audience = optionalAudience.get();
             audience.setRoom(updatedRoom);
             audience = this.repository.save(audience);
-            return new AudienceDto(audience);
+            return audience;
         }
         throw new NotFoundException(String.format("There is no audience with id = %d", id));
     }

@@ -1,7 +1,7 @@
 package com.german.studentschedule.services;
 
 
-import com.german.studentschedule.util.exceptions.NotFoundException;
+import com.german.studentschedule.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

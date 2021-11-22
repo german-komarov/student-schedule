@@ -13,7 +13,7 @@ public class Group extends BaseModel {
 
     @OneToMany
     @JoinTable(
-            name = "students_groups",
+            name = "groups_students",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
@@ -21,6 +21,14 @@ public class Group extends BaseModel {
 
     @OneToMany(mappedBy = "group")
     private Set<Lesson> lessons;
+
+    @ManyToMany
+    @JoinTable(
+            name = "groups_subjects",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    private Set<Subject> subjects;
 
     public String getName() {
         return name;
@@ -42,6 +50,17 @@ public class Group extends BaseModel {
         return lessons;
     }
 
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+    public Set<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(Set<Subject> subjects) {
+        this.subjects = subjects;
+    }
 
     @Override
     public boolean equals(Object o) {
