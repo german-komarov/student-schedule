@@ -13,7 +13,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class User extends BaseModel implements UserDetails {
 
     private String email;
