@@ -1,6 +1,7 @@
 package com.german.studentschedule.dto;
 
 import com.german.studentschedule.domain.User;
+import com.german.studentschedule.util.constants.RoleName;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -12,7 +13,7 @@ public class FullUserDto {
     private ZonedDateTime updatedAt;
     private String email;
     private boolean enable;
-    private Set<RoleDto> roles;
+    private RoleName role;
     private ShortGroupDto group;
     private Set<LessonDto> lessons;
 
@@ -29,9 +30,7 @@ public class FullUserDto {
         this.updatedAt = user.getUpdatedAt();
         this.email = user.getEmail();
         this.enable = user.isEnabled();
-        if(user.getRoles()!=null) {
-            this.roles = user.getRoles().stream().map(RoleDto::new).collect(Collectors.toSet());
-        }
+        this.role = user.getRole();
         if (user.getGroup()!=null) {
             this.group = new ShortGroupDto(user.getGroup());
             if(user.getGroup().getLessons()!=null) {
@@ -81,12 +80,12 @@ public class FullUserDto {
         this.enable = enable;
     }
 
-    public Set<RoleDto> getRoles() {
-        return roles;
+    public RoleName getRole() {
+        return role;
     }
 
-    public void setRoles(Set<RoleDto> roles) {
-        this.roles = roles;
+    public void setRole(RoleName role) {
+        this.role = role;
     }
 
     public ShortGroupDto getGroup() {

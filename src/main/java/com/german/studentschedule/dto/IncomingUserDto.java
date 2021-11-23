@@ -1,6 +1,6 @@
 package com.german.studentschedule.dto;
 
-public class CreatingUserDto {
+public class IncomingUserDto {
     private String email;
     private String password;
     private String passwordConfirm;

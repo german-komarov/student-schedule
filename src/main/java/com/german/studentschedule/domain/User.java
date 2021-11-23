@@ -1,11 +1,13 @@
 package com.german.studentschedule.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.german.studentschedule.util.constants.RoleName;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -15,18 +17,12 @@ import java.util.Set;
 public class User extends BaseModel implements UserDetails {
 
     private String email;
-
-    @JsonIgnore
     private String password;
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<Role> roles;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleName role;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,7 +31,7 @@ public class User extends BaseModel implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        return Collections.singleton(()->this.role.toString());
     }
 
 
@@ -86,12 +82,12 @@ public class User extends BaseModel implements UserDetails {
         this.enabled = enabled;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public RoleName getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(RoleName role) {
+        this.role = role;
     }
 
     public Group getGroup() {

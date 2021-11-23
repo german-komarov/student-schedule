@@ -11,8 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class EventSourcing {
@@ -20,7 +18,6 @@ public class EventSourcing {
     private final AudienceRepository audienceRepository;
     private final GroupRepository groupRepository;
     private final LessonRepository lessonRepository;
-    private final RoleRepository roleRepository;
     private final SubjectRepository subjectRepository;
     private final UserRepository userRepository;
     private final CorpusRepository corpusRepository;
@@ -31,7 +28,6 @@ public class EventSourcing {
     public EventSourcing(AudienceRepository audienceRepository,
                          GroupRepository groupRepository,
                          LessonRepository lessonRepository,
-                         RoleRepository roleRepository,
                          SubjectRepository subjectRepository,
                          UserRepository userRepository,
                          CorpusRepository corpusRepository,
@@ -39,7 +35,6 @@ public class EventSourcing {
         this.audienceRepository = audienceRepository;
         this.groupRepository = groupRepository;
         this.lessonRepository = lessonRepository;
-        this.roleRepository = roleRepository;
         this.subjectRepository = subjectRepository;
         this.userRepository = userRepository;
         this.corpusRepository = corpusRepository;
@@ -50,16 +45,9 @@ public class EventSourcing {
 
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() {
-        Map<RoleName, Role> rolesByNames = new HashMap<>();
 
         // Check if database contains anything.
-        if(roleRepository.findAll().isEmpty()) {
-            for (RoleName rn : RoleName.values()) {
-                Role role = this.roleRepository.saveAndFlush(new Role(rn));
-                rolesByNames.put(rn, role);
-            }
-
-
+        if(this.userRepository.findAll().isEmpty()) {
             Corpus corpus = new Corpus("eastern 2");
             corpus = this.corpusRepository.saveAndFlush(corpus);
 
@@ -84,20 +72,20 @@ public class EventSourcing {
             student.setEmail("student1@test.com");
             student.setPassword(this.passwordEncoder.encode("password"));
             student.setEnabled(true);
-            student.setRoles(Collections.singleton(rolesByNames.get(RoleName.ROLE_STUDENT)));
+            student.setRole(RoleName.ROLE_STUDENT);
             student.setGroup(group);
             student = this.userRepository.saveAndFlush(student);
 
             admin.setEmail("admin1@test.com");
             admin.setPassword(this.passwordEncoder.encode("password"));
             admin.setEnabled(true);
-            admin.setRoles(Collections.singleton(rolesByNames.get(RoleName.ROLE_ADMIN)));
+            admin.setRole(RoleName.ROLE_ADMIN);
             admin = this.userRepository.saveAndFlush(admin);
 
             superAdmin.setEmail("superadmin1@test.com");
             superAdmin.setPassword(this.passwordEncoder.encode("password"));
             superAdmin.setEnabled(true);
-            superAdmin.setRoles(Collections.singleton(rolesByNames.get(RoleName.ROLE_SUPER_ADMIN)));
+            superAdmin.setRole(RoleName.ROLE_SUPER_ADMIN);
             superAdmin = this.userRepository.saveAndFlush(superAdmin);
 
             Lesson lesson = new Lesson();
