@@ -1,9 +1,10 @@
 package com.german.studentschedule.repository;
 
 import com.german.studentschedule.domain.User;
+import com.german.studentschedule.util.projections.LongProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +53,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByEmailWithAllNests(String email);
 
     Optional<User> findByEmail(String email);
+
+    @Query("select u.group.id as value from User u where u.id=:userId")
+    LongProjection findGroupIdByUser(Long userId);
 
 
     @Modifying(flushAutomatically = true)

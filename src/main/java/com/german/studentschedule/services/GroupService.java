@@ -25,27 +25,20 @@ public class GroupService {
     }
 
     public List<Group> readAll() {
-        return this.repository.findAllWithAllProperties();
+        return this.repository.findAllWithAllNests();
     }
 
-    public Group readById(Long id) throws NotFoundException {
-        Optional<Group> optionalGroup = this.repository.findById(id);
-        if(optionalGroup.isPresent()) {
-            return optionalGroup.get();
-        }
-        throw new NotFoundException(String.format("There is no group with id = %d", id));
-    }
 
     public Group readByIdWithAllNests(Long id) throws NotFoundException {
-        Optional<Group> optionalGroup = this.repository.findByIdWithAllProperties(id);
+        Optional<Group> optionalGroup = this.repository.findByIdWithAllNests(id);
         if(optionalGroup.isPresent()) {
             return optionalGroup.get();
         }
         throw new NotFoundException(String.format("There is no group with id = %d", id));
     }
 
-    public List<Group> readByNameContaining(String word) {
-        return this.repository.findByNameContaining(word.toLowerCase(Locale.ROOT));
+    public List<Group> readByNameContainingWithAllNests(String word) {
+        return this.repository.findByNameContainingWithAllNests(word.toLowerCase(Locale.ROOT));
     }
 
     public Group create(String name) throws AlreadyExistsException {
@@ -71,6 +64,6 @@ public class GroupService {
         if(used) {
             throw new NotAllowedOperation("This group cannot be deleted as it is used by student(s)");
         }
-        this.repository.deleteByIdRegardlessExistence(id);
+        this.repository.deleteByIdCustom(id);
     }
 }

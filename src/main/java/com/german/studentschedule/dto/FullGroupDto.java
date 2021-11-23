@@ -3,9 +3,8 @@ package com.german.studentschedule.dto;
 import com.german.studentschedule.domain.Group;
 
 import java.time.ZonedDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FullGroupDto {
@@ -13,9 +12,9 @@ public class FullGroupDto {
     private String name;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
-    private Set<ShortSubjectDto> subjects = new HashSet<>();
-    private Set<ShortUserDto> students = new HashSet<>();
-    private Set<LessonDto> lessons = new HashSet<>();
+    private List<ShortSubjectDto> subjects = new ArrayList<>();
+    private List<ShortUserDto> students = new ArrayList<>();
+    private List<LessonDto> lessons = new ArrayList<>();
 
     public FullGroupDto() {
     }
@@ -27,15 +26,15 @@ public class FullGroupDto {
         this.updatedAt = group.getUpdatedAt();
 
         if(group.getSubjects()!=null) {
-            this.subjects = group.getSubjects().stream().map(ShortSubjectDto::new).collect(Collectors.toSet());
+            this.subjects = group.getSubjects().stream().map(ShortSubjectDto::new).collect(Collectors.toList());
         }
 
         if(group.getStudents()!=null) {
-            this.students = group.getStudents().stream().map(ShortUserDto::new).collect(Collectors.toSet());
+            this.students = group.getStudents().stream().map(ShortUserDto::new).collect(Collectors.toList());
         }
 
         if(group.getLessons()!=null) {
-            this.lessons = group.getLessons().stream().map(LessonDto::new).collect(Collectors.toSet());
+            this.lessons = group.getLessons().stream().map(LessonDto::new).collect(Collectors.toList());
         }
     }
 
@@ -71,27 +70,27 @@ public class FullGroupDto {
         this.updatedAt = updatedAt;
     }
 
-    public Set<ShortSubjectDto> getSubjects() {
+    public List<ShortSubjectDto> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(Set<ShortSubjectDto> subjects) {
+    public void setSubjects(List<ShortSubjectDto> subjects) {
         this.subjects = subjects;
     }
 
-    public Set<ShortUserDto> getStudents() {
+    public List<ShortUserDto> getStudents() {
         return students;
     }
 
-    public void setStudents(Set<ShortUserDto> students) {
+    public void setStudents(List<ShortUserDto> students) {
         this.students = students;
     }
 
-    public Set<LessonDto> getLessons() {
+    public List<LessonDto> getLessons() {
         return lessons;
     }
 
-    public void setLessons(Set<LessonDto> lessons) {
+    public void setLessons(List<LessonDto> lessons) {
         this.lessons = lessons;
     }
 }

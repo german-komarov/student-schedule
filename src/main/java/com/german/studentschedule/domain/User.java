@@ -1,6 +1,5 @@
 package com.german.studentschedule.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.german.studentschedule.util.constants.RoleName;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 
 @Entity

@@ -6,9 +6,9 @@ import com.german.studentschedule.domain.User;
 import com.german.studentschedule.dto.IncomingUserDto;
 import com.german.studentschedule.exceptions.AlreadyExistsException;
 import com.german.studentschedule.exceptions.NotAllowedOperation;
-import com.german.studentschedule.exceptions.WrongDataException;
-import com.german.studentschedule.repository.UserRepository;
 import com.german.studentschedule.exceptions.NotFoundException;
+import com.german.studentschedule.exceptions.WrongValueException;
+import com.german.studentschedule.repository.UserRepository;
 import com.german.studentschedule.util.constants.RoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -73,7 +73,11 @@ public class UserService {
         throw new NotFoundException(String.format("There is no user with email = %s", email));
     }
 
-    public User create(User principal, IncomingUserDto dto) throws AlreadyExistsException, WrongDataException, NotFoundException, NotAllowedOperation {
+    public Long readGroupIdByUser(User user) {
+        return this.repository.findGroupIdByUser(user.getId()).getValue();
+    }
+
+    public User create(User principal, IncomingUserDto dto) throws AlreadyExistsException, WrongValueException, NotAllowedOperation {
         this.validateForCreating(principal, dto);
         User user = new User();
         user.setEmail(dto.getEmail());
@@ -81,14 +85,18 @@ public class UserService {
         user.setEnabled(true);
         user.setRole(RoleName.valueOf(dto.getRole()));
         if(dto.getGroup()!=null) {
-            Group group = this.groupService.readByIdWithAllNests(dto.getGroup());
-            user.setGroup(group);
+            try {
+                Group group = this.groupService.readByIdWithAllNests(dto.getGroup());
+                user.setGroup(group);
+            } catch (NotFoundException e) {
+                throw new WrongValueException(e.getMessage());
+            }
         }
         return this.repository.save(user);
     }
 
 
-    public User update(User principal, Long id, IncomingUserDto dto) throws NotFoundException, AlreadyExistsException, WrongDataException, NotAllowedOperation {
+    public User update(User principal, Long id, IncomingUserDto dto) throws NotFoundException, AlreadyExistsException, WrongValueException, NotAllowedOperation {
         User userToUpdate = this.readByIdWithAllNests(id);
         this.validateForUpdating(principal, userToUpdate, dto);
         if(dto.getEmail()!=null) {
@@ -101,8 +109,12 @@ public class UserService {
             userToUpdate.setRole(RoleName.valueOf(dto.getRole()));
         }
         if(dto.getGroup()!=null) {
-            Group group = this.groupService.readByIdWithAllNests(dto.getGroup());
-            userToUpdate.setGroup(group);
+            try {
+                Group group = this.groupService.readByIdWithAllNests(dto.getGroup());
+                userToUpdate.setGroup(group);
+            } catch (NotFoundException e) {
+                throw new WrongValueException(e.getMessage());
+            }
         }
         return this.repository.save(userToUpdate);
     }
@@ -127,7 +139,7 @@ public class UserService {
         this.repository.deleteByIdCustom(id);
     }
 
-    private void validateForCreating(User principal, IncomingUserDto dto) throws AlreadyExistsException, WrongDataException, NotAllowedOperation {
+    private void validateForCreating(User principal, IncomingUserDto dto) throws AlreadyExistsException, WrongValueException, NotAllowedOperation {
         String email = dto.getEmail();
         if(this.repository.existsByEmail(email)) {
             throw new AlreadyExistsException(String.format("There is already user with email = %s", email));
@@ -135,22 +147,22 @@ public class UserService {
 
         String password = dto.getPassword();
         if(password==null) {
-            throw new WrongDataException("Password cannot be null");
+            throw new WrongValueException("Password cannot be null");
         }
         String passwordConfirm = dto.getPasswordConfirm();
         if(!password.equals(passwordConfirm)) {
-            throw new WrongDataException("Password and password confirm are not matched");
+            throw new WrongValueException("Password and password confirm are not matched");
         }
 
 
         if(dto.getRole()==null) {
-            throw new WrongDataException("Role cannot be null");
+            throw new WrongValueException("Role cannot be null");
         }
         RoleName roleName;
         try {
             roleName = RoleName.valueOf(dto.getRole());
         } catch (IllegalArgumentException e) {
-            throw new WrongDataException(String.format("There is no role with name = %s. Only %s available", dto.getRole(), Arrays.toString(new RoleName[]{RoleName.ROLE_STUDENT, RoleName.ROLE_ADMIN})));
+            throw new WrongValueException(String.format("There is no role with name = %s. Only %s available", dto.getRole(), Arrays.toString(new RoleName[]{RoleName.ROLE_STUDENT, RoleName.ROLE_ADMIN})));
         }
         if(principal.getRole().equals(RoleName.ROLE_ADMIN) && !roleName.equals(RoleName.ROLE_STUDENT)) {
             throw new NotAllowedOperation("ADMIN can create only students");
@@ -159,7 +171,7 @@ public class UserService {
             throw new NotAllowedOperation("It is impossible to create SUPER ADMIN vie API, only manually");
         }
     }
-    private void validateForUpdating(User principal, User userToUpdate, IncomingUserDto dto) throws AlreadyExistsException, WrongDataException, NotAllowedOperation {
+    private void validateForUpdating(User principal, User userToUpdate, IncomingUserDto dto) throws AlreadyExistsException, WrongValueException, NotAllowedOperation {
         String email = dto.getEmail();
         if(email!=null) {
             if (!userToUpdate.getEmail().equals(email)) {
@@ -171,7 +183,7 @@ public class UserService {
         String password = dto.getPassword();
         if(password!=null) {
                 if(!password.equals(dto.getPasswordConfirm())) {
-                    throw new WrongDataException("Password and password confirm are not matched");
+                    throw new WrongValueException("Password and password confirm are not matched");
                 }
         }
         if(dto.getRole()!=null) {
@@ -179,7 +191,7 @@ public class UserService {
             try {
                 roleName = RoleName.valueOf(dto.getRole());
             } catch (IllegalArgumentException e) {
-                throw new WrongDataException(String.format("There is no role with name = %s. Only %s available", dto.getRole(), Arrays.toString(RoleName.values())));
+                throw new WrongValueException(String.format("There is no role with name = %s. Only %s available", dto.getRole(), Arrays.toString(RoleName.values())));
             }
             if(principal.getRole().equals(RoleName.ROLE_ADMIN) && !roleName.equals(RoleName.ROLE_STUDENT)) {
                 throw new NotAllowedOperation("ADMIN can update only students");

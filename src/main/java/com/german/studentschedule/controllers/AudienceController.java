@@ -2,11 +2,11 @@ package com.german.studentschedule.controllers;
 
 
 import com.german.studentschedule.domain.Audience;
-import com.german.studentschedule.exceptions.AlreadyExistsException;
-import com.german.studentschedule.services.AudienceService;
 import com.german.studentschedule.dto.AudienceDto;
+import com.german.studentschedule.exceptions.AlreadyExistsException;
 import com.german.studentschedule.exceptions.NotAllowedOperation;
 import com.german.studentschedule.exceptions.NotFoundException;
+import com.german.studentschedule.services.AudienceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class AudienceController {
     @GetMapping
     public ResponseEntity<Object> getAll() {
         try {
-            List<AudienceDto> audiences = this.audienceService.readAll().stream().map(AudienceDto::new).collect(Collectors.toList());
+            List<AudienceDto> audiences = this.audienceService.readAllWithAllNests().stream().map(AudienceDto::new).collect(Collectors.toList());
             return ResponseEntity.ok(singletonMap("audiences", audiences));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -46,7 +46,7 @@ public class AudienceController {
     @GetMapping("/by/id/{id}")
     public ResponseEntity<Object> getById(@PathVariable Long id) {
         try {
-            Audience audience = this.audienceService.readById(id);
+            Audience audience = this.audienceService.readByIdWithAllNests(id);
             return ResponseEntity.ok(singletonMap("audience", new AudienceDto(audience)));
         } catch (NotFoundException e) {
             return ResponseEntity
@@ -62,7 +62,7 @@ public class AudienceController {
     @GetMapping("/by/corpus/{corpusId}")
     public ResponseEntity<Object> getByCorpus(@PathVariable Long corpusId) {
         try {
-            List<AudienceDto> audiences = this.audienceService.readByCorpus(corpusId).stream().map(AudienceDto::new).collect(Collectors.toList());
+            List<AudienceDto> audiences = this.audienceService.readByCorpusWithAllNests(corpusId).stream().map(AudienceDto::new).collect(Collectors.toList());
             return ResponseEntity.ok(singletonMap("audiences", audiences));
         } catch (Exception e) {
             log.error(e.getMessage(), e);

@@ -6,7 +6,7 @@ import java.util.Objects;
 @Entity
 @Table(
         name = "audiences",
-        indexes = @Index(name = "uk__auditory__corpus__room", columnList = "corpus_id, room", unique = true)
+        indexes = @Index(name = "uk__audiences__corpus__room", columnList = "corpus_id, room", unique = true)
 )
 public class Audience extends BaseModel {
 
@@ -38,5 +38,29 @@ public class Audience extends BaseModel {
 
     public void setRoom(int room) {
         this.room = room;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Audience)) return false;
+        Audience audience = (Audience) o;
+        return getRoom() == audience.getRoom() && Objects.equals(getCorpus(), audience.getCorpus());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRoom(), getCorpus());
+    }
+
+    @Override
+    public String toString() {
+        return "Audience{" +
+                "room=" + room +
+                ", corpus=" + corpus +
+                ", id=" + id +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

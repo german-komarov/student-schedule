@@ -62,7 +62,7 @@ public class GroupController {
     @GetMapping("/by/name/{word}")
     public ResponseEntity<Object> getByNameContaining(@PathVariable String word) {
         try {
-            List<FullGroupDto> groups = this.groupService.readByNameContaining(word).stream().map(FullGroupDto::new).collect(Collectors.toList());
+            List<FullGroupDto> groups = this.groupService.readByNameContainingWithAllNests(word).stream().map(FullGroupDto::new).collect(Collectors.toList());
             return ResponseEntity.ok(singletonMap("groups", groups));
         } catch (Exception e) {
             log.error(e.getMessage(), e);

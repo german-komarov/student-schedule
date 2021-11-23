@@ -45,7 +45,7 @@ public class SubjectController {
     @GetMapping("/by/id/{id}")
     public ResponseEntity<Object> getById(@PathVariable Long id) {
         try {
-            Subject subject = this.subjectService.readById(id);
+            Subject subject = this.subjectService.readByIdWithAllNests(id);
             return ResponseEntity.ok(singletonMap("subject", new FullSubjectDto(subject)));
         } catch (NotFoundException e) {
             return ResponseEntity
@@ -60,7 +60,7 @@ public class SubjectController {
     @GetMapping("/by/name/{word}")
     public ResponseEntity<Object> getByNameContaining(@PathVariable String word) {
         try {
-            List<FullSubjectDto> subjects = this.subjectService.readByNameContaining(word).stream().map(FullSubjectDto::new).collect(Collectors.toList());
+            List<FullSubjectDto> subjects = this.subjectService.readByNameContainingWithAllNests(word).stream().map(FullSubjectDto::new).collect(Collectors.toList());
             return ResponseEntity.ok(singletonMap("subjects", subjects));
         } catch (Exception e) {
             log.error(e.getMessage(), e);

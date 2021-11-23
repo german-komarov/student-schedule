@@ -22,7 +22,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             "left join fetch g.students gstud " +
             "left join fetch gl.audience gla " +
             "left join fetch gla.corpus")
-    List<Group> findAllWithAllProperties();
+    List<Group> findAllWithAllNests();
 
     @Query("select g " +
             "from Group g " +
@@ -33,7 +33,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             "left join fetch gl.audience gla " +
             "left join fetch gla.corpus " +
             "where g.id=:id")
-    Optional<Group> findByIdWithAllProperties(Long id);
+    Optional<Group> findByIdWithAllNests(Long id);
 
 
     @Query("select g from Group g left join fetch g.students where g.id=id")
@@ -48,12 +48,15 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             "left join fetch gl.audience gla " +
             "left join fetch gla.corpus " +
             "where lower(g.name) like %:word%")
-    List<Group> findByNameContaining(String word);
+    List<Group> findByNameContainingWithAllNests(String word);
+
+
+
 
     @Query("select case when count(u.id)>0 then true else false end from User u where u.group.id=:id")
     boolean isUsed(Long id);
 
     @Modifying(flushAutomatically = true)
     @Query("delete from Group g where g.id = :id")
-    void deleteByIdRegardlessExistence(Long id);
+    void deleteByIdCustom(Long id);
 }

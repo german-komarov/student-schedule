@@ -12,13 +12,13 @@ import java.util.Optional;
 public interface AudienceRepository extends JpaRepository<Audience, Long> {
 
     @Query("select a from Audience a join fetch a.corpus ac")
-    List<Audience> findAllCustom();
+    List<Audience> findAllWithAllNests();
 
     @Query("select a from Audience a join fetch a.corpus ac where a.id=:id")
-    Optional<Audience> findByIdCustom(Long id);
+    Optional<Audience> findByIdWithAllNests(Long id);
 
     @Query("select a from Audience a join fetch a.corpus ac where ac.id=:corpus_id")
-    List<Audience> findByCorpus(@Param("corpus_id") Long corpusId);
+    List<Audience> findByCorpusWithAllNests(@Param("corpus_id") Long corpusId);
 
     @Query("select case when count(a.id)>0 then true else false end from Audience a where a.corpus.id=:corpus_id and a.room=:room")
     boolean existsByCorpusAndRoom(@Param("corpus_id") Long corpus, int room);
@@ -29,5 +29,5 @@ public interface AudienceRepository extends JpaRepository<Audience, Long> {
 
     @Modifying(flushAutomatically = true)
     @Query("delete from Audience a where a.id = :id")
-    void deleteByIdRegardlessExistence(Long id);
+    void deleteByIdCustom(Long id);
 }

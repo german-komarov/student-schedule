@@ -14,8 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Collections;
-
 import static com.german.studentschedule.util.constants.Templates.FORBIDDEN_JSON;
 import static com.german.studentschedule.util.constants.Templates.UNAUTHORIZED_JSON;
 
@@ -45,8 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/v1/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-                .anyRequest().authenticated()
+                .antMatchers("/api/v1/lessons/by/date/*/for/principal").authenticated()
+                .anyRequest().hasAnyRole("ADMIN", "SUPER_ADMIN")
                 .and()
                 .httpBasic()
                 .and()

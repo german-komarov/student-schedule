@@ -13,10 +13,10 @@ public class Lesson extends BaseModel {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Subject subject;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Audience audience;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Group group;
 
     public LocalDate getDate() {
@@ -35,14 +35,13 @@ public class Lesson extends BaseModel {
         this.subject = subject;
     }
 
-    public Audience getAuditory() {
+    public Audience getAudience() {
         return audience;
     }
 
-    public void setAuditory(Audience audience) {
+    public void setAudience(Audience audience) {
         this.audience = audience;
     }
-
 
     public Group getGroup() {
         return group;

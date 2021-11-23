@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CorpusRepository extends JpaRepository<Corpus, Long> {
 
@@ -23,5 +22,5 @@ public interface CorpusRepository extends JpaRepository<Corpus, Long> {
 
     @Modifying(flushAutomatically = true)
     @Query("delete from Corpus c where c.id = :id")
-    void deleteByIdRegardlessExistence(Long id);
+    void deleteByIdCustom(Long id);
 }

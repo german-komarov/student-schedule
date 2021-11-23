@@ -2,9 +2,9 @@ package com.german.studentschedule.services;
 
 import com.german.studentschedule.domain.Corpus;
 import com.german.studentschedule.exceptions.AlreadyExistsException;
-import com.german.studentschedule.repository.CorpusRepository;
 import com.german.studentschedule.exceptions.NotAllowedOperation;
 import com.german.studentschedule.exceptions.NotFoundException;
+import com.german.studentschedule.repository.CorpusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +60,7 @@ public class CorpusService {
         if(used) {
             throw new NotAllowedOperation("This corpus cannot be deleted as it is used by auditory");
         }
-        this.repository.deleteByIdRegardlessExistence(id);
+        this.repository.deleteByIdCustom(id);
     }
 
 }

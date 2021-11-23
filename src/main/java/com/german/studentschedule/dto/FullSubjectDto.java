@@ -1,19 +1,17 @@
 package com.german.studentschedule.dto;
 
-import com.german.studentschedule.domain.Group;
 import com.german.studentschedule.domain.Subject;
 
 import java.time.ZonedDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FullSubjectDto {
     private Long id;
     private String name;
-    private Set<ShortGroupDto> groups = new HashSet<>();
-    private Set<LessonDto> lessons = new HashSet<>();
+    private List<ShortGroupDto> groups = new ArrayList<>();
+    private List<LessonDto> lessons = new ArrayList<>();
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 
@@ -28,11 +26,11 @@ public class FullSubjectDto {
         this.updatedAt = subject.getUpdatedAt();
 
         if(subject.getGroups()!=null) {
-            this.groups = subject.getGroups().stream().map(ShortGroupDto::new).collect(Collectors.toSet());
+            this.groups = subject.getGroups().stream().map(ShortGroupDto::new).collect(Collectors.toList());
         }
 
         if(subject.getLessons()!=null) {
-            this.lessons = subject.getLessons().stream().peek(l->l.setSubject(subject)).map(LessonDto::new).collect(Collectors.toSet());
+            this.lessons = subject.getLessons().stream().peek(l->l.setSubject(subject)).map(LessonDto::new).collect(Collectors.toList());
         }
     }
 
@@ -52,19 +50,19 @@ public class FullSubjectDto {
         this.name = name;
     }
 
-    public Set<ShortGroupDto> getGroups() {
+    public List<ShortGroupDto> getGroups() {
         return groups;
     }
 
-    public void setGroups(Set<ShortGroupDto> groups) {
+    public void setGroups(List<ShortGroupDto> groups) {
         this.groups = groups;
     }
 
-    public Set<LessonDto> getLessons() {
+    public List<LessonDto> getLessons() {
         return lessons;
     }
 
-    public void setLessons(Set<LessonDto> lessons) {
+    public void setLessons(List<LessonDto> lessons) {
         this.lessons = lessons;
     }
 

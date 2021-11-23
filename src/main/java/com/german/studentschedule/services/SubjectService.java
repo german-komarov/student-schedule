@@ -26,19 +26,19 @@ public class SubjectService {
     }
 
     public List<Subject> readAll() {
-        return this.repository.findAllCustom();
+        return this.repository.findAllWithAllNests();
     }
 
-    public Subject readById(Long id) throws NotFoundException {
-        Optional<Subject> optionalSubject = this.repository.findByIdCustom(id);
+    public Subject readByIdWithAllNests(Long id) throws NotFoundException {
+        Optional<Subject> optionalSubject = this.repository.findByIdWithAllNests(id);
         if(optionalSubject.isPresent()) {
             return optionalSubject.get();
         }
         throw new NotFoundException(String.format("There is no subject with id = %d", id));
     }
 
-    public List<Subject> readByNameContaining(String word) {
-        return this.repository.findByNameContainingInLowerCase(word.toLowerCase(Locale.ROOT));
+    public List<Subject> readByNameContainingWithAllNests(String word) {
+        return this.repository.findByNameContainingWithAllNests(word.toLowerCase(Locale.ROOT));
     }
 
     public Subject create(String name) throws AlreadyExistsException {
@@ -64,7 +64,7 @@ public class SubjectService {
         if(used) {
             throw new NotAllowedOperation("This subject cannot be deleted as it is used by group(s)");
         }
-        this.repository.deleteByIdRegardlessExistence(id);
+        this.repository.deleteByIdCustom(id);
     }
 
 }

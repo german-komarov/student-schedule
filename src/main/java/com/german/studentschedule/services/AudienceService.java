@@ -4,17 +4,15 @@ package com.german.studentschedule.services;
 import com.german.studentschedule.domain.Audience;
 import com.german.studentschedule.domain.Corpus;
 import com.german.studentschedule.exceptions.AlreadyExistsException;
-import com.german.studentschedule.repository.AudienceRepository;
-import com.german.studentschedule.dto.AudienceDto;
 import com.german.studentschedule.exceptions.NotAllowedOperation;
 import com.german.studentschedule.exceptions.NotFoundException;
+import com.german.studentschedule.repository.AudienceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -30,13 +28,13 @@ public class AudienceService {
     }
 
 
-    public List<Audience> readAll() {
-        return this.repository.findAllCustom();
+    public List<Audience> readAllWithAllNests() {
+        return this.repository.findAllWithAllNests();
     }
 
 
-    public Audience readById(Long id) throws NotFoundException {
-        Optional<Audience> optionalAudience = this.repository.findByIdCustom(id);
+    public Audience readByIdWithAllNests(Long id) throws NotFoundException {
+        Optional<Audience> optionalAudience = this.repository.findByIdWithAllNests(id);
         if(optionalAudience.isPresent()) {
             return optionalAudience.get();
         }
@@ -44,8 +42,8 @@ public class AudienceService {
     }
 
 
-    public List<Audience> readByCorpus(Long corpusId) {
-        return this.repository.findByCorpus(corpusId);
+    public List<Audience> readByCorpusWithAllNests(Long corpusId) {
+        return this.repository.findByCorpusWithAllNests(corpusId);
     }
 
 
@@ -76,7 +74,7 @@ public class AudienceService {
         if(used) {
             throw new NotAllowedOperation("This auditory cannot be deleted as it is used by lesson");
         }
-        this.repository.deleteByIdRegardlessExistence(id);
+        this.repository.deleteByIdCustom(id);
     }
 
 }

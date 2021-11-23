@@ -19,18 +19,18 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
             "left join fetch s.groups sg " +
             "left join fetch sl.audience sla " +
             "left join fetch sla.corpus slac")
-    List<Subject> findAllCustom();
+    List<Subject> findAllWithAllNests();
 
-    @Query("select s from Subject s join fetch s.lessons join fetch s.groups where s.id=:id")
-    Optional<Subject> findByIdCustom(Long id);
+    @Query("select s from Subject s left join fetch s.lessons left join fetch s.groups where s.id=:id")
+    Optional<Subject> findByIdWithAllNests(Long id);
 
-    @Query("select s from Subject s join fetch s.lessons join fetch s.groups where lower(s.name) like %:word%")
-    List<Subject> findByNameContainingInLowerCase(String word);
+    @Query("select s from Subject s left join fetch s.lessons left join fetch s.groups where lower(s.name) like %:word%")
+    List<Subject> findByNameContainingWithAllNests(String word);
 
     @Query(value = "select exists(select * from groups_subjects where subject_id=:id)", nativeQuery = true)
     boolean isUsed(Long id);
 
     @Modifying(flushAutomatically = true)
     @Query("delete from Subject s where s.id = :id")
-    void deleteByIdRegardlessExistence(Long id);
+    void deleteByIdCustom(Long id);
 }

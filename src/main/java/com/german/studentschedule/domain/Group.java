@@ -1,6 +1,7 @@
 package com.german.studentschedule.domain;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class Group extends BaseModel {
     private Set<User> students;
 
     @OneToMany(mappedBy = "group")
-    private Set<Lesson> lessons;
+    private List<Lesson> lessons;
 
     @ManyToMany
     @JoinTable(
@@ -46,11 +47,11 @@ public class Group extends BaseModel {
     }
 
 
-    public Set<Lesson> getLessons() {
+    public List<Lesson> getLessons() {
         return lessons;
     }
 
-    public void setLessons(Set<Lesson> lessons) {
+    public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
     }
 
@@ -82,8 +83,6 @@ public class Group extends BaseModel {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", name='" + name + '\'' +
-                ", participants=" + students +
-                ", lessons=" + lessons +
                 '}';
     }
 }

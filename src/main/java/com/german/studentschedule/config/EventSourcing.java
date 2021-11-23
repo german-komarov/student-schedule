@@ -89,7 +89,7 @@ public class EventSourcing {
             superAdmin = this.userRepository.saveAndFlush(superAdmin);
 
             Lesson lesson = new Lesson();
-            lesson.setAuditory(audience);
+            lesson.setAudience(audience);
             lesson.setDate(LocalDate.now().plusDays(1));
             lesson.setSubject(subject);
             lesson.setGroup(group);

@@ -4,7 +4,8 @@ import com.german.studentschedule.domain.User;
 import com.german.studentschedule.util.constants.RoleName;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class FullUserDto {
@@ -15,7 +16,7 @@ public class FullUserDto {
     private boolean enable;
     private RoleName role;
     private ShortGroupDto group;
-    private Set<LessonDto> lessons;
+    private List<LessonDto> lessons = new ArrayList<>();;
 
     public FullUserDto() {
     }
@@ -34,7 +35,7 @@ public class FullUserDto {
         if (user.getGroup()!=null) {
             this.group = new ShortGroupDto(user.getGroup());
             if(user.getGroup().getLessons()!=null) {
-                this.lessons = user.getGroup().getLessons().stream().map(LessonDto::new).collect(Collectors.toSet());
+                this.lessons = user.getGroup().getLessons().stream().map(LessonDto::new).collect(Collectors.toList());
             }
         }
 
@@ -96,11 +97,11 @@ public class FullUserDto {
         this.group = group;
     }
 
-    public Set<LessonDto> getLessons() {
+    public List<LessonDto> getLessons() {
         return lessons;
     }
 
-    public void setLessons(Set<LessonDto> lessons) {
+    public void setLessons(List<LessonDto> lessons) {
         this.lessons = lessons;
     }
 }
